@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/lab-3-datastream-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lab-4-stateful-compute/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lab-5-table-api-with-sql/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lab-7-alink-project/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-1-pv-uv-computing/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-1-pv-uv-computing/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-2-fraud-detection/flink-job/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-2-fraud-detection/flink-job/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-2-fraud-detection/webapp/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-3-table-and-sql/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-4-recommend/recommend-backend/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-4-recommend/recommend-flink-job/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/project-4-recommend/recommend-flink-job/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

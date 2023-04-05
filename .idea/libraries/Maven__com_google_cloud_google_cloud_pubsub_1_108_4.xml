@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.google.cloud:google-cloud-pubsub:1.108.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Mavenrepo/com/google/cloud/google-cloud-pubsub/1.108.4/google-cloud-pubsub-1.108.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../Mavenrepo/com/google/cloud/google-cloud-pubsub/1.108.4/google-cloud-pubsub-1.108.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Mavenrepo/com/google/cloud/google-cloud-pubsub/1.108.4/google-cloud-pubsub-1.108.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
