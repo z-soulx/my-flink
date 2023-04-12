@@ -13,6 +13,14 @@
         <flink.version>1.11.1</flink.version>
         <scala.binary.version>2.11</scala.binary.version>
     </properties>
+    <dependencies>
+    <dependency>
+        <groupId>org.apache.flink</groupId>
+        <artifactId>flink-clients_2.11</artifactId>
+        <version>${flink.version}</version>
+    </dependency>
+
+    </dependencies>
     <modules>
         <module>lab-3-datastream-api</module>
         <module>lab-4-stateful-compute</module>

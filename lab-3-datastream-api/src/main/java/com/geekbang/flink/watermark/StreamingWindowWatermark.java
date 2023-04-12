@@ -20,11 +20,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.apache.flink.util.StringUtils;
 
 /**
  * Watermark 案例
  */
 public class StreamingWindowWatermark {
+
+    /**
+     * 在机器上启动 nc -lk 9000
+     * @param args
+     * @throws Exception
+     */
 
     public static void main(String[] args) throws Exception {
         //定义socket的端口号
@@ -45,8 +52,12 @@ public class StreamingWindowWatermark {
         DataStream<Tuple2<String, Long>> inputMap = text.map(new MapFunction<String, Tuple2<String, Long>>() {
             @Override
             public Tuple2<String, Long> map(String value) throws Exception {
+                if ("".equalsIgnoreCase(value)){
+                    return null;
+                }
                 String[] arr = value.split(",");
-                return new Tuple2<>(arr[0], Long.parseLong(arr[1]));
+//                return new Tuple2<>(arr[0], Long.parseLong(arr[1]));
+                return new Tuple2<>(arr[1], Long.parseLong(arr[0]));
             }
         });
 
@@ -54,7 +65,8 @@ public class StreamingWindowWatermark {
         DataStream<Tuple2<String, Long>> waterMarkStream = inputMap.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks<Tuple2<String, Long>>() {
 
             Long currentMaxTimestamp = 0L;
-            final Long maxOutOfOrderness = 10000L;// 最大允许的乱序时间是10s
+//            final Long maxOutOfOrderness = 10000L;// 最大允许的乱序时间是10s
+            final Long maxOutOfOrderness = 3000L;// 最大允许的乱序时间是10s
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             /**
