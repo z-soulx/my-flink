@@ -1,11 +1,14 @@
 package com.geekbang.flink.watermark;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -18,7 +21,6 @@ import org.apache.flink.streaming.api.functions.AssignerWithPeriodicWatermarks;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
 import org.apache.flink.streaming.api.watermark.Watermark;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
@@ -68,6 +70,11 @@ public class StreamingWindowWatermark {
 				});
 
 		//抽取timestamp和生成watermark
+//		SingleOutputStreamOperator<Tuple2<String, Long>> waterMarkStream= inputMap
+//				.assignTimestampsAndWatermarks(
+//						WatermarkStrategy.<Tuple2<String, Long>>forBoundedOutOfOrderness(Duration.ofMillis(0L))
+//								.withIdleness(Duration.ofSeconds(3)).withTimestampAssigner(
+//								(SerializableTimestampAssigner<Tuple2<String, Long>>) (e, t) -> e.f1));
 		DataStream<Tuple2<String, Long>> waterMarkStream = inputMap
 				.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks<Tuple2<String, Long>>() {
 

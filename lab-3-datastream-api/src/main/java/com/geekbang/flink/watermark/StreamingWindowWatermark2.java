@@ -61,7 +61,8 @@ public class StreamingWindowWatermark2 {
         DataStream<Tuple2<String, Long>> waterMarkStream = inputMap.assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks<Tuple2<String, Long>>() {
 
             Long currentMaxTimestamp = 0L;
-            final Long maxOutOfOrderness = 10000L;// 最大允许的乱序时间是10s
+//            final Long maxOutOfOrderness = 10000L;// 最大允许的乱序时间是10s
+            final Long maxOutOfOrderness = 0L;// 最大允许的乱序时间是10s
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             /**
@@ -90,7 +91,7 @@ public class StreamingWindowWatermark2 {
         //注意，由于getSideOutput方法是SingleOutputStreamOperator子类中的特有方法，所以这里的类型，不能使用它的父类dataStream。
         SingleOutputStreamOperator<String> window = waterMarkStream.keyBy(0)
                 .window(TumblingEventTimeWindows.of(Time.seconds(3)))//按照消息的EventTime分配窗口，和调用TimeWindow效果一样
-                //.allowedLateness(Time.seconds(2))//允许数据迟到2秒
+//                .allowedLateness(Time.seconds(2))//允许数据迟到2秒  会多产生计算记录
                 .sideOutputLateData(outputTag)
                 .apply(new WindowFunction<Tuple2<String, Long>, String, Tuple, TimeWindow>() {
                     /**
@@ -127,6 +128,20 @@ public class StreamingWindowWatermark2 {
         env.execute("eventtime-watermark");
 
     }
+
+    /**  开了延迟后
+     * key:Miko,eventtime:[1448892362000|2015-11-30 22:06:02.000],currentMaxTimestamp:[1448892362000|2015-11-30 22:06:02.000],watermark:[1448892362000|2015-11-30 22:06:02.000]
+     * key:Miko,eventtime:[1448892363000|2015-11-30 22:06:03.000],currentMaxTimestamp:[1448892363000|2015-11-30 22:06:03.000],watermark:[1448892363000|2015-11-30 22:06:03.000]
+     * (Miko),1,2015-11-30 22:06:02.000,2015-11-30 22:06:02.000,2015-11-30 22:06:00.000,2015-11-30 22:06:03.000
+     * key:Miko,eventtime:[1448892361000|2015-11-30 22:06:01.000],currentMaxTimestamp:[1448892363000|2015-11-30 22:06:03.000],watermark:[1448892363000|2015-11-30 22:06:03.000]
+     * (Miko),2,2015-11-30 22:06:01.000,2015-11-30 22:06:02.000,2015-11-30 22:06:00.000,2015-11-30 22:06:03.000
+     * key:Miko,eventtime:[1448892364000|2015-11-30 22:06:04.000],currentMaxTimestamp:[1448892364000|2015-11-30 22:06:04.000],watermark:[1448892364000|2015-11-30 22:06:04.000]
+     * key:Miko,eventtime:[1448892361000|2015-11-30 22:06:01.000],currentMaxTimestamp:[1448892364000|2015-11-30 22:06:04.000],watermark:[1448892364000|2015-11-30 22:06:04.000]
+     * (Miko),3,2015-11-30 22:06:01.000,2015-11-30 22:06:02.000,2015-11-30 22:06:00.000,2015-11-30 22:06:03.000
+     * key:Miko,eventtime:[1448892365000|2015-11-30 22:06:05.000],currentMaxTimestamp:[1448892365000|2015-11-30 22:06:05.000],watermark:[1448892365000|2015-11-30 22:06:05.000]
+     * key:Miko,eventtime:[1448892361000|2015-11-30 22:06:01.000],currentMaxTimestamp:[1448892365000|2015-11-30 22:06:05.000],watermark:[1448892365000|2015-11-30 22:06:05.000]
+     * (Miko,1448892361000)
+     */
 
 
 

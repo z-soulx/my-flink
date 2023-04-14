@@ -105,12 +105,15 @@ public class BroadcastProcessFunctionExample {
 
         @Override
         public void processElement(Long value, ReadOnlyContext ctx, Collector<String> out) throws Exception {
+            System.out.println(value);
+            System.out.println(ctx.getBroadcastState(descriptor).get(value));
         }
 
         @Override
         public void processBroadcastElement(String value, Context ctx, Collector<String> out) throws Exception {
             long key = Long.parseLong(value.split(":")[1]);
             ctx.getBroadcastState(descriptor).put(key, value);
+            System.out.println(ctx.getBroadcastState(descriptor).get(key));
         }
     }
 }

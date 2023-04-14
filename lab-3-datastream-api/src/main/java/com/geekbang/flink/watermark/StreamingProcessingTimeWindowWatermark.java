@@ -59,7 +59,7 @@ public class StreamingProcessingTimeWindowWatermark {
 							return null;
 						}
 						String[] arr = value.split(",");
-						return new Tuple2<>(arr[0], System.currentTimeMillis());
+						return new Tuple2<>(arr[0], 0L);
 					}
 				});
 
