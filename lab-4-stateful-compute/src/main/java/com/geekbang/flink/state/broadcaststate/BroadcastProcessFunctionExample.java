@@ -1,11 +1,14 @@
 package com.geekbang.flink.state.broadcaststate;
 
+import com.geekbang.flink.state.savepoint.StatefulStreamingJob.MySource;
 import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.AssignerWithPunctuatedWatermarks;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
@@ -38,7 +41,8 @@ public class BroadcastProcessFunctionExample {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
 
-        final DataStream<Long> srcOne = env.generateSequence(0L, 5L)
+//        final DataStream<Long> srcOne = env.generateSequence(0L, 5L)
+        final DataStream<Long> srcOne = env.addSource(new MySource2())
                 .assignTimestampsAndWatermarks(new CustomWmEmitter<Long>() {
 
                     private static final long serialVersionUID = -8500904795760316195L;
@@ -48,6 +52,8 @@ public class BroadcastProcessFunctionExample {
                         return element;
                     }
                 });
+
+
 
         final DataStream<String> srcTwo = env.fromCollection(expected.values())
                 .assignTimestampsAndWatermarks(new CustomWmEmitter<String>() {
@@ -106,14 +112,14 @@ public class BroadcastProcessFunctionExample {
         @Override
         public void processElement(Long value, ReadOnlyContext ctx, Collector<String> out) throws Exception {
             System.out.println(value);
-            System.out.println(ctx.getBroadcastState(descriptor).get(value));
+            ReadOnlyBroadcastState<Long, String> state = ctx.getBroadcastState(descriptor);
+            System.out.println(state.get(value));
         }
 
         @Override
         public void processBroadcastElement(String value, Context ctx, Collector<String> out) throws Exception {
             long key = Long.parseLong(value.split(":")[1]);
             ctx.getBroadcastState(descriptor).put(key, value);
-            System.out.println(ctx.getBroadcastState(descriptor).get(key));
         }
     }
 }
