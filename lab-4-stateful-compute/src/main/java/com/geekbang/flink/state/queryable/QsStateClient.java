@@ -48,8 +48,8 @@ public class QsStateClient {
 		ParameterTool parameters = ParameterTool.fromArgs(args);
 
 		// setup values
-		String jobId = parameters.getRequired("job-id");
-		String host = parameters.get("host", "localhost");
+		String jobId = parameters.get("job-id","4117ec8bebf4cc8dffa5ea85a2f7ef84");
+		String host = parameters.get("host", "127.0.0.1");
 		int port = parameters.getInt("port", 9069);
 		int numIterations = parameters.getInt("iterations", 1500);
 

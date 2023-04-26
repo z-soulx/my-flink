@@ -32,6 +32,7 @@
         <module>project-2-fraud-detection/webapp</module>
         <module>project-3-table-and-sql</module>
         <module>project-4-recommend</module>
+        <module>queryable-state-demo</module>
     </modules>
 
 </project>

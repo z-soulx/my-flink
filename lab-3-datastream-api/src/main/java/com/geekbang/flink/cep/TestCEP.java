@@ -114,7 +114,7 @@ public class TestCEP {
 						List<Tuple3<String, String, String>> endList = pattern.get("next");
 
 						Tuple3<String, String, String> tuple3 = endList.get(0);
-						return tuple3.toString();
+						return tuple3.toString() +"match";
 					}
 				}
 		);
@@ -124,7 +124,7 @@ public class TestCEP {
 
 		//输出超时数据的流
 		DataStream<String> sideOutput = resultStream.getSideOutput(outputTag);
-		sideOutput.print();
+//		sideOutput.print();
 
 		env.execute("Test CEP");
 	}

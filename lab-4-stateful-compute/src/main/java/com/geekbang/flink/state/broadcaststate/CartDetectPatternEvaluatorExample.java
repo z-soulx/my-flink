@@ -23,7 +23,7 @@ import org.apache.flink.util.Collector;
 public class CartDetectPatternEvaluatorExample {
 
     public static void main(String[] args) throws Exception {
-
+       // eg: -brokers 127.0.0.1:9200  -username admin  -password 123456
         final ParameterTool parameterTool = ParameterTool.fromArgs(args);
         StreamExecutionEnvironment env = KafkaExampleUtil.prepareExecutionEnv(parameterTool);
 

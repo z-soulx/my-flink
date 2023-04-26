@@ -17,6 +17,7 @@
 
 package com.geekbang.flink.state.queryable;
 
+import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.state.MapState;
 import org.apache.flink.api.common.state.MapStateDescriptor;
@@ -24,8 +25,13 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.utils.ParameterTool;
+import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.configuration.QueryableStateOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
+import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.minicluster.MiniCluster;
+import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.runtime.state.StateBackend;
@@ -33,6 +39,7 @@ import org.apache.flink.runtime.state.filesystem.FsStateBackend;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.shaded.guava18.com.google.common.collect.Iterables;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
+import org.apache.flink.streaming.api.environment.LocalStreamEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.apache.flink.util.Collector;
@@ -41,7 +48,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Random;
 
-/**
+/** 只有本地模式（eg：MiniCluster）的启动流程 QS才能，连接到本地
+ * @See queryable-state-demo 项目 com.hansight.hanstreaming.Test
  * Streaming application that creates an {@link Email} pojo with random ids and increasing
  * timestamps and passes it to a stateful {@link org.apache.flink.api.common.functions.FlatMapFunction},
  * where it is exposed as queryable state.
@@ -52,7 +60,7 @@ public class QsStateProducer {
 		final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
 		ParameterTool tool = ParameterTool.fromArgs(args);
-		String tmpPath = tool.getRequired("tmp-dir");
+		String tmpPath = tool.get("tmp-dir","");
 		String stateBackendType = tool.getRequired("state-backend");
 
 		StateBackend stateBackend;
